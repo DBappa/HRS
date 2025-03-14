@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\RoomsController;
 use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
@@ -23,8 +24,18 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('/admin/dashboard', [AdminController::class, 'AdminDashboard'])->name('admin.dashboard');  
 
+// ---------------------------------------------------------------- Admin Routes ---------------------------------------------------------------- //
+
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'AdminDashboard'])->name('admin.dashboard');
+
+
+    Route::prefix('rooms')->name('rooms.')->group(function () {
+        Route::get('/', [RoomsController::class, 'index'])->name('index');
+        Route::get('/create', [RoomsController::class, 'create'])->name('create');
+    });
+});
 
 // Route::middleware(['auth', 'admin'])->group(function (){
 
