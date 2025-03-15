@@ -115,15 +115,19 @@ function updateFacilitiesInput() {
         JSON.stringify(selectedFacilities);
 }
 
-
 // Image Drag & Drop Upload Feature
 const dropzone = document.getElementById("dropzone");
 const previewContainer = document.getElementById("previewContainer");
 
 // Handle files from drag-and-drop or input selection
+let droppedFiles = []; // Store dropped files here
+
+// Handle files from drag-and-drop or input selection
 function handleFiles(files) {
     Array.from(files).forEach((file) => {
         if (file.type.startsWith("image/")) {
+            droppedFiles.push(file); // Add file to droppedFiles array
+
             const reader = new FileReader();
 
             reader.onload = (e) => {
@@ -144,7 +148,7 @@ function handleFiles(files) {
                 img.alt = file.name;
                 img.classList.add("w-full", "h-full", "object-cover");
 
-                // Create the delete (cross) button
+                // Create the delete button
                 const deleteButton = document.createElement("button");
                 deleteButton.innerHTML = "&times;";
                 deleteButton.classList.add(
@@ -165,14 +169,21 @@ function handleFiles(files) {
                 );
 
                 // Attach delete functionality
-                deleteButton.onclick = () => previewDiv.remove();
+                deleteButton.onclick = () => {
+                    previewDiv.remove();
+                    droppedFiles = droppedFiles.filter(
+                        (f) => f.name !== file.name
+                    ); // Remove from array
+                };
 
                 // Append the image and delete button to the container
                 previewDiv.appendChild(img);
                 previewDiv.appendChild(deleteButton);
 
                 // Append the container to the preview section
-                previewContainer.appendChild(previewDiv);
+                document
+                    .getElementById("previewContainer")
+                    .appendChild(previewDiv);
             };
 
             reader.readAsDataURL(file);
@@ -190,3 +201,61 @@ function handleDrop(event) {
 function handleDragOver(event) {
     event.preventDefault();
 }
+
+// Submit Form
+function submitForm() {
+    const formData = new FormData();
+    const fields = [
+        "roomNumber",
+        "roomName",
+        "roomDescription",
+        "roomPrice",
+        "roomCapacity",
+        "floorNumber",
+        "status",
+    ];
+
+    // Append input fields (including empty ones)
+    fields.forEach((field) => {
+        const value = document.getElementById(field).value || "";
+        formData.append(field, value);
+    });
+
+    // Append selected amenities (tags)
+    const facilitiesInput =
+        document.getElementById("hiddenFacilitiesInput").value || "[]";
+    formData.append("facilities", facilitiesInput);
+
+    // Consolidate all files
+    const fileInput = document.getElementById("fileInput");
+    const allFiles = [...fileInput.files, ...(window.droppedFiles || [])];
+
+    // Append all images under a single key
+    formData.append("images[]", allFiles);
+
+    for (const [key, value] of formData.entries()) {
+        console.log(key, value);
+    }
+
+    // Send FormData to Laravel route
+    fetch('{{ url("admin/rooms") }}', {
+        method: "POST",
+        headers: {
+            "X-CSRF-TOKEN": document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content"),
+        },
+        body: formData,
+    })
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+        .catch((error) => console.error("Error:", error));
+}
+
+// Attach submit event listener to the form submit button
+document
+    .querySelector('button[type="submit"]')
+    .addEventListener("click", function (event) {
+        event.preventDefault();
+        submitForm();
+    });
