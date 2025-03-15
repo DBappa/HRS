@@ -16,22 +16,29 @@ class RoomsController extends Controller
 
     public function create(){
         $facilities = [
-            1 => 'Geyser',
-            2 => 'Wifi', 
-            3 => 'AC', 
-            4 => 'TV', 
-            5 => 'Refrigerator', 
-            6 => 'Microwave', 
-            7 => 'Washing Machine', 
-            8 => 'Parking', 
-            9 => 'Swimming Pool', 
-            10 => 'Gym',
-            11 => 'Security', 
-            12 => 'Power Backup', 
-            13 => 'Balcony', 
-            14 => 'Elevator'
+            ['id' => 1, 'name' => 'Geyser'],
+            ['id' => 2, 'name' => 'Wifi'],
+            ['id' => 3, 'name' => 'AC'],
+            ['id' => 4, 'name' => 'TV'],
+            ['id' => 5, 'name' => 'Refrigerator'],
+            ['id' => 6, 'name' => 'Microwave'],
+            ['id' => 7, 'name' => 'Washing Machine'],
+            ['id' => 8, 'name' => 'Parking'],
+            ['id' => 9, 'name' => 'Swimming Pool'],
+            ['id' => 10, 'name' => 'Gym'],
+            ['id' => 11, 'name' => 'Security'],
+            ['id' => 12, 'name' => 'Power Backup'],
+            ['id' => 13, 'name' => 'Balcony'],
+            ['id' => 14, 'name' => 'Elevator']
         ];
-        return view('admin.rooms.create', ['facilities' => $facilities]);
-
+    
+        $statuses = [
+            ['id' => 1, 'name' => 'Occupied'],
+            ['id' => 2, 'name' => 'Vacant'],
+            ['id' => 3, 'name' => 'Under Maintenance'],
+            ['id' => 4, 'name' => 'Not In Use']
+        ];
+        return view('admin.rooms.create', ['facilities' => $facilities, 'statuses' => $statuses]);
     }
+    
 }
