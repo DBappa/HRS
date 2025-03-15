@@ -27,6 +27,8 @@
             <link href={{asset("admin/backend-theme/assets/css/app.css")}} rel="stylesheet">
             <link href={{asset("admin/backend-theme/assets/css/icons.css")}} rel="stylesheet">
 
+            <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+
         <!-- Theme Style CSS -->
             <link rel="stylesheet" href={{asset("admin/backend-theme/assets/css/dark-theme.css")}}/>
             <link rel="stylesheet" href={{asset("admin/backend-theme/assets/css/semi-dark.css")}}/>
