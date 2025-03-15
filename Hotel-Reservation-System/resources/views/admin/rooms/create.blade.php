@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="page-wrapper bg-gray-100">
+    <div class="page-wrapper">
         <div class="page-content mx-auto py-6">
 
             <div class="flex justify-end mb-6">
@@ -32,10 +32,12 @@
                             <label for="facilitiesInput" class="block text-gray-700 font-bold mb-2">Facilities</label>
                             <input type="text" id="facilitiesInput" class="w-full border border-gray-300 rounded px-4 py-2" placeholder="Enter a facility">
                             <small class="text-gray-500">Search for facilities and select one from the list.</small>
-                            <ul id="facilitiesDropdown" class="absolute w-full mt-2 bg-white border border-gray-300 rounded shadow-lg hidden"></ul>
+                            <ul id="facilitiesDropdown" class="absolute w-full mt-2 bg-white border border-gray-300 rounded shadow-lg hidden max-h-40 overflow-y-auto"></ul>
                         </div>
 
                         <div class="mb-4">
+                            <input type="hidden" id="hiddenFacilitiesInput" name="hiddenFacilities">
+
                             <label class="block text-gray-700 font-bold mb-2">Selected Facilities</label>
                             <div id="facilityTags" class="mb-2 flex flex-wrap gap-2"></div>
                         </div>

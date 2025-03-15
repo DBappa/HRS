@@ -1,47 +1,35 @@
 document.getElementById('facilitiesInput').addEventListener('input', function () {
     const query = this.value.trim().toLowerCase();
     const dropdown = document.getElementById('facilitiesDropdown');
-    
     dropdown.innerHTML = '';
 
     if (query.length > 0) {
-        const filteredFacilities = Object.values(facilities).filter(facility => 
-            facility.toLowerCase().includes(query)
-        );
+        const filteredFacilities = Object.values(facilities).filter(f => f.toLowerCase().includes(query));
+        dropdown.style.display = filteredFacilities.length > 0 ? 'block' : 'none';
 
-        if (filteredFacilities.length > 0) {
-            filteredFacilities.forEach(facility => {
-                const listItem = document.createElement('li');
-                listItem.textContent = facility;
-                listItem.classList.add('dropdown-item');
-                listItem.addEventListener('click', function () {
-                    document.getElementById('facilitiesInput').value = facility;
-                    dropdown.style.display = 'none';
-                });
-                dropdown.appendChild(listItem);
+        filteredFacilities.forEach(facility => {
+            const listItem = document.createElement('li');
+            listItem.textContent = facility;
+            listItem.classList.add('dropdown-item', 'py-2', 'font-lg', 'pl-2', 'cursor-pointer');
+            listItem.addEventListener('click', () => {
+                document.getElementById('facilitiesInput').value = facility;
+                dropdown.style.display = 'none';
             });
-
-            dropdown.style.display = 'block';
-        } else {
-            dropdown.style.display = 'none';
-        }
+            dropdown.appendChild(listItem);
+        });
     } else {
         dropdown.style.display = 'none';
     }
 });
 
-// Add facilities as tags
-let selectedFacilities = []; // Array to store selected facilities
+let selectedFacilities = []; // Store selected facilities
 
 document.getElementById('facilitiesInput').addEventListener('keypress', function (event) {
     if (event.key === 'Enter') {
         event.preventDefault();
         const facility = this.value.trim();
-
-        if (facility.length > 0 && !selectedFacilities.find(f => f.name === facility)) {
-            // Assume ID is determined from facilities array
+        if (facility && !selectedFacilities.some(f => f.name === facility)) {
             const facilityObject = { id: facilities[facility], name: facility };
-
             selectedFacilities.push(facilityObject);
             addFacilityTag(facilityObject);
             this.value = '';
@@ -52,26 +40,24 @@ document.getElementById('facilitiesInput').addEventListener('keypress', function
 function addFacilityTag(facilityObject) {
     const tagContainer = document.getElementById('facilityTags');
     const tag = document.createElement('span');
-    tag.classList.add('badge', 'bg-primary', 'me-1');
+    tag.classList.add('inline-flex', 'items-center', 'bg-blue-500', 'text-white', 'text-sm', 'font-medium', 'px-3', 'py-1', 'rounded-full', 'mr-2', 'shadow-md');
     tag.textContent = facilityObject.name;
 
-    // Add a remove button to the tag
     const removeButton = document.createElement('button');
     removeButton.type = 'button';
-    removeButton.classList.add('btn-close', 'btn-close-white', 'ms-2');
-    removeButton.addEventListener('click', function () {
+    removeButton.classList.add('ml-2', 'text-white', 'hover:text-gray-200', 'focus:outline-none', 'focus:ring', 'focus:ring-gray-300');
+    removeButton.textContent = 'x';
+    removeButton.addEventListener('click', () => {
         selectedFacilities = selectedFacilities.filter(f => f.id !== facilityObject.id);
         tag.remove();
+        updateFacilitiesInput();
     });
 
     tag.appendChild(removeButton);
     tagContainer.appendChild(tag);
-
-    // Sync the selected facilities to a hidden input field
     updateFacilitiesInput();
 }
 
 function updateFacilitiesInput() {
-    const hiddenInput = document.getElementById('hiddenFacilitiesInput');
-    hiddenInput.value = JSON.stringify(selectedFacilities);
+    document.getElementById('hiddenFacilitiesInput').value = JSON.stringify(selectedFacilities);
 }
