@@ -32,7 +32,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
 
     Route::prefix('rooms')->name('rooms.')->group(function () {
         Route::get('/', [RoomsController::class, 'index'])->name('index');
-        Route::get('/create', [RoomsController::class, 'create'])->name('create');
+        Route::any('/create', [RoomsController::class, 'create'])->name('create');
     });
 });
 
