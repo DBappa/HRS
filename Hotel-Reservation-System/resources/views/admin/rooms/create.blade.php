@@ -10,8 +10,8 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 card p-4">
-                <div>
+            <div class="flex flex-row gap-6 card p-4">
+                <div class="w-1/2">
                     <form>
                         <div class="mb-4 flex w-full gap-2">
                             <div class="w-1/4">
@@ -88,7 +88,7 @@
                     </form>
                 </div>
 
-                <div>
+                <div class="w-1/2">
                     <label class="block text-gray-700 font-bold mb-2">Thumbnails</label>
                     <div id="dropzone"
                         class="border-dashed border-2 border-gray-300 p-6 rounded flex flex-col items-center justify-center cursor-pointer h-2/5 hover:border-blue-500"
@@ -105,7 +105,6 @@
                         <!-- Image previews will be dynamically added here -->
                     </div>
                 </div>
-
             </div>
 
         </div>
