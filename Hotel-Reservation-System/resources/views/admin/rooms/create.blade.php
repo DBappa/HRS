@@ -116,5 +116,5 @@
         const facilities = @json($facilities);
         const createRoomUrl = "{{ route('admin.rooms.create') }}";
     </script>
-    <script src="{{ asset('admin/rooms-assets/rooms.js') }}"></script>
+    <script src="{{ mix('resources/js/admin/rooms/rooms.js') }}"></script>
 @endsection
