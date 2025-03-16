@@ -115,6 +115,7 @@
 @section('scripts')
     <script>
         const facilities = @json($facilities);
+        const createRoomUrl = "{{ route('admin.rooms.create') }}";
     </script>
     <script src="{{ asset('admin/rooms-assets/rooms.js') }}"></script>
 @endsection

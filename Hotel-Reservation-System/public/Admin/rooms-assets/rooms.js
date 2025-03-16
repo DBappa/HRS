@@ -233,12 +233,8 @@ function submitForm() {
     // Append all images under a single key
     formData.append("images[]", allFiles);
 
-    for (const [key, value] of formData.entries()) {
-        console.log(key, value);
-    }
-
     // Send FormData to Laravel route
-    fetch('{{ url("admin/rooms") }}', {
+    fetch("create", {
         method: "POST",
         headers: {
             "X-CSRF-TOKEN": document
@@ -247,9 +243,47 @@ function submitForm() {
         },
         body: formData,
     })
-        .then((response) => response.json())
+        .then((response) => {
+            return response.json();
+        })
         .then((data) => console.log(data))
-        .catch((error) => console.error("Error:", error));
+        .catch((error) => {
+            console.error("Error occurred:", error);
+            try {
+                const errorData = JSON.parse(error.message);
+                console.error("Validation Errors:", errorData.errors);
+                // Optionally, display the errors on the form
+                displayValidationErrors(errorData.errors);
+            } catch (e) {
+                console.error("Error parsing error message:", e);
+            }
+        });
+
+    function displayValidationErrors(errors) {
+        // Clear previous error messages
+        const errorDiv = document.getElementById("validation-errors");
+        if (errorDiv) {
+            errorDiv.innerHTML = "";
+        } else {
+            errorDiv = document.createElement("div");
+            errorDiv.id = "validation-errors";
+            // Add to the form or a suitable location
+        }
+
+        // Display each error message
+        for (const field in errors) {
+            if (errors.hasOwnProperty(field)) {
+                errors[field].forEach((message) => {
+                    const errorPara = document.createElement("p");
+                    errorPara.textContent = `${field}: ${message}`;
+                    errorDiv.appendChild(errorPara);
+                });
+            }
+        }
+
+        // Append the error container to the form or a designated area
+        document.querySelector("form").prepend(errorDiv);
+    }
 }
 
 // Attach submit event listener to the form submit button
